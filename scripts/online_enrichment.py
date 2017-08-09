@@ -48,6 +48,7 @@ class AdaptiveEnrichment(BasicInterface):
             len(marked_subdomains), 's' if len(marked_subdomains) > 1 else ''))
         for ii in marked_subdomains:
             self.reductor.enrich_local(ii, U, mu)
+        self.logger.info('reducing ...')
         self.rd = self.reductor.reduce()
         # clear age count
         for ii in range(self.block_space.num_blocks):
