@@ -1,13 +1,17 @@
 ```
-# This file is part of the dune-gdt-pymor-interaction project:
-#   https://github.com/dune-community/dune-gdt-pymor-interaction
+# This file is part of the proceedings-mbour-2017-lrbms-control project:
+#   https://github.com/ftschindler-work/proceedings-mbour-2017-lrbms-control
 # Copyright holders: Felix Schindler
 # License: BSD 2-Clause License (http://opensource.org/licenses/BSD-2-Clause)
 ```
 
-[dune-gdt-pymor-interaction](https://github.com/dune-community/dune-gdt-pymor-interaction)
-is a git supermodule which serves as a demonstration for the interaction between
-[dune-gdt](https://github.com/dune-community/dune-gdt) and [pymor](http://pymor.org).
+[proceedings-mbour-2017-lrbms-control](https://github.com/ftschindler-work/proceedings-mbour-2017-lrbms-control)
+contains the code which is required to reproduce the results from
+```
+Localized Model Reduction in PDE Constrained Optimization
+M. Ohlberger, M. Schaefer, F. Schindler
+```
+regarding the LRBMS.
 
 
 # Some notes on required software
@@ -31,8 +35,8 @@ First of all
 ```bash
 mkdir -p $HOME/Projects/dune                 # <- adapt this to your needs
 cd $HOME/Projects/dune
-git clone https://github.com/dune-community/dune-gdt-pymor-interaction.git
-cd dune-gdt-pymor-interaction
+git clone https://github.com/ftschindler-work/proceedings-mbour-2017-lrbms-control.git
+cd proceedings-mbour-2017-lrbms-control
 git submodule update --init --recursive
 ```
 
@@ -43,18 +47,17 @@ The next step depends on wether you are runnign in a specific docker container o
 Presuming you followed [these instructions](https://github.com/dune-community/Dockerfiles/blob/master/README.md) to get your docker setup working, and you just started and connected to a docker container by calling
 
 ```bash
-./docker_run.sh debian-minimal-interactive dune-gdt-pymor-interaction /bin/bash
+./docker_run.sh arch-minimal-interactive proceedings-mbour-2017-lrbms-control /bin/bash
 ```
 
 you are now left with an empty bash prompt (`exit` will get you out of there).
 Issue the following commands:
 
 ```bash
-export OPTS=gcc
-cd $HOME/dune-gdt-pymor-interaction/debian-minimal #   <- this should match the docker container
-source PATH.sh                                     #                             you are running
+export OPTS=gcc-relwithdebinfo
+cd $HOME/proceedings-mbour-2017-lrbms-control/arch-minimal #   <- this should match the docker container you are running 
+source PATH.sh
 cd $BASEDIR
-rm external-libraries.cfg ; ln -s debian-minimal/external-libraries.cfg . #         <- this also
 ```
 
 Download and build all external libraries by calling (this _might_ take some time):
@@ -67,9 +70,10 @@ Download and build all external libraries by calling (this _might_ take some tim
 The next time you start the container you should at least issue the following commands before you start your work (you should also do this now to make use of the generated python virtualenv):
 
 ```bash
-export OPTS=gcc
-cd $HOME/dune-gdt-pymor-interaction/debian-minimal
+export OPTS=gcc-relwithdebinfo
+cd $HOME/proceedings-mbour-2017-lrbms-control/arch-minimal
 source PATH.sh
+cd $BASEDIR
 ```
 
 ## 2.b: Preparations on your machine
@@ -79,7 +83,7 @@ source PATH.sh
   Select one of those options by defining
   
   ```bash
-  export OPTS=gcc
+  export OPTS=gcc-relwithdebinfo
   ```
 
   Note that dune-xt and dune-gdt do not build the Python bindings by default.
@@ -192,4 +196,5 @@ To make use of the bindings:
   ./start_notebook_server.py
   ```
 
-  should present you with an url which you can open in your favorite browser to show the notebooks.
+  should present you with an url which you can open in your favorite browser to serve the notebooks.
+  To reproduce the results, take a look at the `proceedings-mbour-2017-lrbms-control.ipynb` notebook and select `Kernel -> Run All`.
