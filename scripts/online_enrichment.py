@@ -48,7 +48,7 @@ class AdaptiveEnrichment(BasicInterface):
             len(marked_subdomains), 's' if len(marked_subdomains) > 1 else ''))
         for ii in marked_subdomains:
             self.reductor.enrich_local(ii, U, mu)
-        self.logger.info('reducing ...')
+        self.logger.info3('reducing ...')
         self.rd = self.reductor.reduce()
         # clear age count
         for ii in range(self.block_space.num_blocks):
@@ -63,6 +63,12 @@ class AdaptiveEnrichment(BasicInterface):
 
     def solve(self, mu, enrichment_steps=np.inf, callback=None):
         mu = self.discretization.parse_parameter(mu)
+        if self.target_error:
+            target_error = self.target_error
+        else:
+            self.logger.info('estimating discretization error:')
+            target_error = 1.1*self.discretization.estimate(self.discretization.solve(mu), mu=mu)
+            self.logger.info('  target error for mu = {} is {}'.format(mu, target_error))
         enrichment_step = 1
         age_count = np.ones(self.block_space.num_blocks)
         local_problem_solves = 0
@@ -76,15 +82,15 @@ class AdaptiveEnrichment(BasicInterface):
                                               'local_problem_solves': local_problem_solves,
                                               'global RB size': self.rd.solution_space.dim,
                                               'local RB sizes': [len(rb) for rb in self.reductor.bases]})
-                if eta <= self.target_error:
-                    self.logger.info3('estimated error {} below target error of {}, no enrichment required ...'.format(eta, self.target_error))
+                if eta <= target_error:
+                    self.logger.info3('estimated error {} below target error of {}, no enrichment required ...'.format(eta, target_error))
                     return U, self.rd, self.reductor
                 if enrichment_step > enrichment_steps:
                     self.logger.warn('estimated error {} above target error of {}, but stopping since enrichment_steps={} reached!'.format(
-                        eta, self.target_error, enrichment_steps))
+                        eta, target_error, enrichment_steps))
                     return U, self.rd, self.reductor
                 enrichment_step += 1
-                self.logger.info3('estimated error {} above target error of {}, enriching ...'.format(eta, self.target_error))
+                self.logger.info3('estimated error {} above target error of {}, enriching ...'.format(eta, target_error))
                 local_problem_solves = self._enrich_once(U, mu, indicators, age_count)
                 self.logger.info3('added {} local basis functions, system size increase: {} --> {}'.format(
                     self.rd.solution_space.dim - rb_size, rb_size, self.rd.solution_space.dim))
