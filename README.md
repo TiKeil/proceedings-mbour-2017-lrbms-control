@@ -197,4 +197,4 @@ To make use of the bindings:
   ```
 
   should present you with an url which you can open in your favorite browser to serve the notebooks.
-  To reproduce the results, take a look at the `proceedings-mbour-2017-lrbms-control.ipynb` notebook and select `Kernel -> Restart & Run All`.
+  To reproduce the results, take a look at the [`proceedings-mbour-2017-lrbms-control.ipyn`](https://github.com/ftschindler-work/proceedings-mbour-2017-lrbms-control/blob/master/notebooks/proceedings-mbour-2017-lrbms-control.ipynb) notebook and select `Kernel -> Restart & Run All`.
